@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>大事件-后台登录页</title>
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" href="css/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="main_wrap">
+        <div class="header">
+            <a href="#" class="logo"><img src="images/logo.png" alt=""></a>
+            <div class="copyright">CopyRight © 2019 深圳百秀信息技术股份有限公司<br>All Rights Reserved</div>
+        </div>
+
+        <div class="login_form_con">
+            <div class="login_title"></div>
+            <form class="login_form">
+                <i class="iconfont icon-user"></i>
+                <i class="iconfont icon-key"></i>
+                <input type="text" class="input_txt" placeholder="邮箱/手机号">
+                <input type="password" class="input_pass" placeholder="密码">
+                <input type="submit" class="input_sub" value="登 录">
+            </form>
+        </div>
+
+    </div>
+
+
+    <!-- bootstrap中的模态框 Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">提示框!!!</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入jq文件 -->
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <!-- 引入bootstrap的js文件 -->
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            //给登录按钮设置一个点击事件,取消默认跳转
+           $('.input_sub').on('click',function(e){
+            //  阻止默认跳转
+               e.preventDefault();
+            // 获取用户输入的账号密码
+            var userName = $('.input_txt').val().trim();
+            var password = $('.input_pass').val().trim();
+            if(userName == "" || password == ""){
+                alert("输入有误,请重新输入")
+                return;
+            }
+            $.ajax({
+                type:"post",
+                url:"https://autumnfish.cn/big/admin/login",
+                data:{
+                    user_name : userName,
+                    password : password,
+                },
+               success:function(backData){
+                    console.log(backData);
+                    if(backData.code == 200){
+                        //如果账号密码正确,就应该登录成功跳转到后台管理的首页.index.html
+                        window.location.href = "index.html";
+                    }else{
+                        alert("密码错误请重新输入!!!");
+                    }
+                       
+                   }
+               })
+           });
+           /*
+           后台接口
+                1、用户登录
+                请求地址：http://localhost:8000/admin/login 网络地址: https://autumnfish.cn/big/admin/login
+                请求方式：post
+                请求参数：
+                名称	类型	说明
+                user_name	string	用户名（admin）
+                password	string	密码(123456)
+           */
+            /*
+            步骤:
+            1.给登录按钮设置一个点击事件,取消默认跳转
+                获取用户输入的账号和密码
+                做一个非空判断,如果为空,弹框提示一下,如果不为空,继续
+            2.发送ajax请求,接受到数据接口返回的数据
+                根据这个数据判断
+                如果账号密码正确,就应该登录成功跳转到后台管理的首页.index.html
+                如果账号密码错误,就弹框提示
+            */
+        });
+    </script>
+</body>
+
+</html>
