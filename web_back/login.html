@@ -67,7 +67,11 @@
             var userName = $('.input_txt').val().trim();
             var password = $('.input_pass').val().trim();
             if(userName == "" || password == ""){
-                alert("输入有误,请重新输入")
+                // alert("输入有误,请重新输入")
+                $('#myModal').modal({
+                    keyboard : true
+                })
+                $(".modal-body").text("账号或密码为空,请重新输入!!!")
                 return;
             }
             $.ajax({
@@ -83,7 +87,11 @@
                         //如果账号密码正确,就应该登录成功跳转到后台管理的首页.index.html
                         window.location.href = "index.html";
                     }else{
-                        alert("密码错误请重新输入!!!");
+                        // alert("密码错误请重新输入!!!");
+                        $('.modal-body').text("密码输入错误请重新输入!!!!")
+                        $('#myModal').modal({
+                            keyboard : true
+                        })
                     }
                        
                    }
