@@ -147,7 +147,9 @@
                         // 返回后台登录
                         window.location.href = "login.html";
                     }else{
-                        alert("退出失败请重新退出!!!");
+                        $('#myModal').modal({
+                            keyboard : true
+                        })
                     }
                     
                 }
