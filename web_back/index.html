@@ -134,30 +134,33 @@
     <script>
         $(function () {
             //给退出的a标签设置一个点击事件
-            $('#btn_logout').on('click', function (e) {
-                e.preventDefault();
-                //发送ajax请求,得到数据
-                $.ajax({
-                    type: 'post',
-                    url: 'https://autumnfish.cn/big/admin/logout',
-                    success: function (backData) {
-                        //console.log(backData);
-                        //判断
-                        if (backData.code == 200) {
-                            //退出成功,跳转到登录页面
-                            window.location.href = './login.html';
-                        } else {
-                            // alert('退出失败');
-                            //调用bs的模态框的方法弹出模态框.
-                            $('#myModal').modal({
-                                keyboard:true
-                            });
-                        }
+           $('#btn_logout').on("click",function(e){
+            //取消默认跳转
+            e.preventDefault();
+            // 发送ajax请求
+            $.ajax({
+                type:"post",
+                url:"https://autumnfish.cn/big/admin/logout",
+                success:function(backData){
+                    console.log(backData);
+                    if(backData.code == 200){
+                        // 返回后台登录
+                        window.location.href = "login.html";
+                    }else{
+                        alert("退出失败请重新退出!!!");
                     }
-                });
-            });
+                    
+                }
+            })
 
-
+           });
+           /*
+           2、退出登录
+            请求地址：http://localhost:8000/admin/logout 网络地址: https://autumnfish.cn/big/admin/logout
+            请求方式：post
+            请求参数：无
+            返回数据：无
+           */
             
             /*
             步骤:
