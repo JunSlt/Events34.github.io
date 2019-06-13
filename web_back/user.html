@@ -65,6 +65,26 @@
         </div>
     </div>
 
+    <script>
+    $(function(){
+        /*
+        步骤:
+        1. 进入个人中心之后
+        2. 调用获取用户详细信息接口
+        3. 数据获取到之后 渲染到 页面上
+         */
+         $.ajax({
+             type:"get",
+             url:"http://localhost:8000/admin/userinfo_get",
+            success:function(backData){
+                console.log(backData);
+                
+            }
+         })
+    });
+   
+    
+    </script>
 </body>
 
 </html>
