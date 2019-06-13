@@ -183,7 +183,7 @@
                 url:"http://localhost:8000/admin/userinfo_get",
                 success:function(backData){
                     // console.log(backData);
-                    $('.user_info span').html("欢迎"+backData.data.username);
+                    $('.user_info span').html("欢迎&nbsp;&nbsp;"+backData.data.username);
                     $('.user_info img').attr("src",backData.data.user_pic);
                     $(".user_center_link img").attr("src",backData.data.user_pic);
                 }
