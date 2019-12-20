@@ -24,38 +24,40 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">用户名称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="李思思">
+                        <input type="text" name="username" class="form-control username" id="inputEmail3" value="李思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">昵称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="思思">
+                        <input type="text" name="nickname" class="form-control nickname" id="inputEmail3" value="思思">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="lisisi@126.com">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
-                    <div class="col-sm-10">
-                        <img src="images/2.jpg" alt="" class="user_pic">
-                        <input type="file" id="exampleInputFile">
+                        <input type="text" name="email" class="form-control email" id="inputEmail3"
+                            value="lisisi@126.com">
                     </div>
                 </div>
 
                 <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
-                        <div class="col-sm-4">
-                            <input type="password" class="form-control" id="inputEmail3" value="12345678">
-                        </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
+                    <div class="col-sm-10">
+                        <img src="images/2.jpg" alt="" class="user_pic">
+                        <input type="file" id="exampleInputFile" name="user_pic">
                     </div>
-               
-    
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
+                    <div class="col-sm-4">
+                        <input type="password" name="password" class="form-control password" id="inputEmail3"
+                            value="12345678">
+                    </div>
+                </div>
+
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success">修改</button>
@@ -65,6 +67,98 @@
         </div>
     </div>
 
+    <script>
+        $(function () {
+            /*
+            步骤:
+            1. 进入个人中心之后
+            2. 调用获取用户详细信息接口
+            3. 数据获取到之后 渲染到 页面上
+             */
+            $.ajax({
+                type: "get",
+                url: "http://localhost:8000/admin/userinfo_get",
+                success: function (backData) {
+                    console.log(backData);
+                    // $('input.username').val(backData.data.username);
+                    for (var key in backData.data) {
+                        $('input.' + key).val(backData.data[key]);
+                    }
+                    $("img.user_pic").attr('src', backData.data.user_pic);
+                }
+            });
+            // 图像预览
+            $("#exampleInputFile").on("change", function () {
+                // 1.获取选中的图片文件
+                var icon = this.files[0];
+                console.log(this.files[0]);
+
+                // 2.根据这个图片文件 创建一个url
+                var url = URL.createObjectURL(icon);
+                console.log(URL.createObjectURL(icon));
+
+                // 3.把这个url交给预览的img
+                $("img.user_pic").attr("src", url);
+            });
+
+            //给修改按钮设置一个点击事件,注意取消默认 跳转.
+            $(".btn-success").on("click", function (e) {
+                // 阻止默认跳转
+                e.preventDefault();
+
+                var formData = new FormData($("form")[0]);
+                // 发送ajax
+                $.ajax({
+                    type: "post",
+                    url: "http://localhost:8000/admin/userinfo_edit",
+                    data: formData,
+                    //下面这句话的意思是不要给我设置请求头.因为我这里发送数据使用的是formData,不需要设置请求头
+                    contentType: false,
+                    //下面这句话的意思是不要把我传递的参数转成key=value这种格式的字符串.
+                    processData: false,
+                    success: function (backData) {
+                        console.log(backData);
+
+                        if (backData.code == 200) {
+                            console.log("修改成功");
+                            $.ajax({
+                                type: "get",
+                                url: "http://localhost:8000/admin/userinfo_get",
+                                success: function (backData) {
+                                    // console.log(backData);
+                                   parent.$('.user_info span').html("欢迎&nbsp;&nbsp;" + backData.data.username);
+                                   parent.$('.user_info img').attr("src", backData.data.user_pic);
+                                   parent.$(".user_center_link img").attr("src", backData.data.user_pic);
+                                }
+                            })
+
+                        }
+                    }
+                })
+            })
+
+
+
+
+        });
+   /*
+        编辑用户信息
+         请求地址：http://localhost:8000/admin/userinfo_edit 网络地址: https://autumnfish.cn/big/admin/userinfo_edit
+         请求方式：post
+         请求参数：使用 formdata 提交
+         名称	类型	说明
+         username	string	用户名称
+         nickname	string	用户昵称
+         email	string	用户邮箱
+         user_pic	string	用户图片地址
+         password	string	用户密码
+         返回数据：
+         名称	类型	说明
+         msg	string	文字信息 ‘修改成功’ ‘修改失败’
+        */
+
+
+    </script>
 </body>
 
 </html>

@@ -140,7 +140,7 @@
             // 发送ajax请求
             $.ajax({
                 type:"post",
-                url:"https://autumnfish.cn/big/admin/logout",
+                url:"http://localhost:8000/admin/logout",
                 success:function(backData){
                     console.log(backData);
                     if(backData.code == 200){
@@ -171,6 +171,38 @@
             2.发送ajax请求,得到数据
                 如果退出成功,跳转到登录页面.
             */
+
+             /*
+            步骤:
+                1. 进入到首页之后
+                2. 通过用户信息接口获取用户的数据
+                3. 渲染到页面上
+            */
+            $.ajax({
+                type:"get",
+                url:"http://localhost:8000/admin/userinfo_get",
+                success:function(backData){
+                    // console.log(backData);
+                    $('.user_info span').html("欢迎&nbsp;&nbsp;"+backData.data.username);
+                    $('.user_info img').attr("src",backData.data.user_pic);
+                    $(".user_center_link img").attr("src",backData.data.user_pic);
+                }
+            })
+
+            /*      
+            获取用户信息
+            请求地址：http://localhost:8000/admin/userinfo_get 网络地址: https://autumnfish.cn/big/admin/userinfo_get
+            请求方式：get
+            请求参数：无
+            返回数据：
+            名称	类型	说明
+            username	string	用户名称
+            nickname	string	用户昵称
+            email	string	用户邮箱
+            user_pic	string	用户图片地址
+            password	string	用户密码    
+    */
+            
         });
     </script>
 
